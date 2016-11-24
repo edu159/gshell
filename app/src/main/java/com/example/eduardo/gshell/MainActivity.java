@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.AdapterView;
-
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +21,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // TEST Server
+        Server s = new Server("cx1", "er1414", "1234", "imperial.ac.uk");
+        s.save(getApplicationContext());
+        Server s2 = Server.load("cx1", getApplicationContext());
+        Log.d("Passed:", s2.toString());
+        // END TEST Server
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
