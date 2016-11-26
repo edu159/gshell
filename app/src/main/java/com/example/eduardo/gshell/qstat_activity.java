@@ -25,23 +25,26 @@ public class qstat_activity extends AppCompatActivity {
         Server server=
                 (Server)bundle.getSerializable("SERVER");
         Log.d("Load:", server.toString());
-        new myTask().execute(1);
+        new myTask(server).execute(1);
 
     }
 
     private class myTask extends AsyncTask<Integer, Void, Void>{
         String output;
+        Server server;
+
 
         //initiate vars
-        public myTask() {
+        public myTask(Server server) {
             super();
+            this.server = server;
             //my params here
         }
 
         @Override
         protected Void doInBackground(Integer... params) {
             try {
-                output = executeRemoteCommand("er1414", "imperial10@@@2015","login.cx1.hpc.ic.ac.uk", 22);
+                output = executeRemoteCommand(server.user_name, server.passwd,server.hostname, server.port);
             } catch (Exception e) {
                 e.printStackTrace();
             }
