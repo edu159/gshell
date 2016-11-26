@@ -2,6 +2,7 @@ package com.example.eduardo.gshell;
 
 import com.jcraft.jsch.*;
 import java.util.Properties;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.util.Log;
+import java.io.File;
+import java.util.List;
 import java.io.ByteArrayOutputStream;
 import android.os.AsyncTask;
 
@@ -45,12 +48,42 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(), HostFormActivity.class));
             }
         });
 
-        ListView gridView = (ListView)findViewById(R.id.server_list);
+        //--------
+        //listing files in directory to pass onto the ListAdapter Method
+        final String[] fileArray;
+        File contextDir = getApplicationContext().getFilesDir();
+        File dataFilesDir = new File(contextDir.getAbsolutePath() + "/dataFiles");
+        //create dir to store dataFiles, in case it does not exist
+        try {
+            //make the new dir: dataFiles
+            dataFilesDir.mkdir();
+            //create a list of files in the dataFiles dir:
+
+        }
+        catch(Exception e){}
+
+        File[] lsDataFilesDir = dataFilesDir.listFiles();
+        fileArray = new String[lsDataFilesDir.length];
+        for (int i = 0; i < lsDataFilesDir.length; ++i){
+            fileArray[i] = lsDataFilesDir[i].getName();
+            //new File(contextDir.getAbsolutePath() + "/dataFiles"+"/"+fileArray[i]).delete();
+            Log.d("File", fileArray[i]);
+        }
+
+        //Log.d("File", "hi");
+
+
+
+
+
+        //---need to save files in new directory - need to change Server.java accordingly
+
+
+        ListView gridView = (ListView) findViewById(R.id.server_list);
 
         gridView.setAdapter(new ListAdapter(getApplicationContext()));
 
@@ -110,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+}
 
     public static String executeRemoteCommand(String username,String password,String hostname,int port)
             throws Exception {

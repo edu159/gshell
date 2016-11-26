@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+import java.io.File;
+
 /**
  * Created by nargesberry on 21/09/16.
  */

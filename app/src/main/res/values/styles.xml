@@ -17,4 +17,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="RowMargin">
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="FormTextMargin">
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+
 </resources>
