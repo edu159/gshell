@@ -3,6 +3,7 @@ package com.example.eduardo.gshell;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.util.Log;
+import android.util.Log;
+
+import java.io.File;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,21 +28,44 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // TEST Server
-        Server s = new Server("cx1", "er1414", "1234", "imperial.ac.uk");
-        s.save(getApplicationContext());
-        Server s2 = Server.load("cx1", getApplicationContext());
-        Log.d("Passed:", s2.toString());
-        // END TEST Server
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
                 startActivity(new Intent(getApplicationContext(), HostFormActivity.class));
             }
         });
+
+        //--------
+        //listing files in directory to pass onto the ListAdapter Method
+        final String[] fileArray;
+        File contextDir = getApplicationContext().getFilesDir();
+        File dataFilesDir = new File(contextDir.getAbsolutePath() + "/dataFiles");
+        //create dir to store dataFiles, in case it does not exist
+        try {
+            //make the new dir: dataFiles
+            dataFilesDir.mkdir();
+            //create a list of files in the dataFiles dir:
+
+        }
+        catch(Exception e){}
+
+        File[] lsDataFilesDir = dataFilesDir.listFiles();
+        fileArray = new String[lsDataFilesDir.length];
+        for (int i = 0; i < lsDataFilesDir.length; ++i){
+            fileArray[i] = lsDataFilesDir[i].getName();
+            //new File(contextDir.getAbsolutePath() + "/dataFiles"+"/"+fileArray[i]).delete();
+            Log.d("File", fileArray[i]);
+        }
+
+        //Log.d("File", "hi");
+
+
+
+
+
+        //---need to save files in new directory - need to change Server.java accordingly
+
 
         ListView gridView = (ListView) findViewById(R.id.server_list);
 
@@ -72,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
                     case 3:
                         //Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
                         break;
+
                 }
+
+                //Snackbar.make(view, fileArray[3], Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
