@@ -1,5 +1,7 @@
 package com.example.eduardo.gshell;
 
+import com.jcraft.jsch.*;
+import java.util.Properties;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,9 +13,13 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.util.Log;
+import java.io.ByteArrayOutputStream;
+import android.os.AsyncTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
+    public String output;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,11 +27,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // TEST Server
-        Server s = new Server("cx1", "er1414", "1234", "imperial.ac.uk");
-        s.save(getApplicationContext());
-        Server s2 = Server.load("cx1", getApplicationContext());
-        Log.d("Passed:", s2.toString());
+        new AsyncTask<Integer, Void, Void>(){
+            @Override
+            protected Void doInBackground(Integer... params) {
+                try {
+                    output = executeRemoteCommand("er1414", "imperial10@@@2015","login.cx1.hpc.ic.ac.uk", 22);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute(1);
+
+
         // END TEST Server
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,5 +109,40 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static String executeRemoteCommand(String username,String password,String hostname,int port)
+            throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try
+        {
+            JSch jsch = new JSch();
+            Session session = jsch.getSession(username, hostname, port);
+            session.setPassword(password);
+
+            // Avoid asking for key confirmation
+            Properties prop = new Properties();
+            prop.put("StrictHostKeyChecking", "no");
+            session.setConfig(prop);
+            session.connect();
+            ChannelExec channelssh = (ChannelExec)
+                    session.openChannel("exec");
+            channelssh.setOutputStream(baos);
+            // Execute command
+            channelssh.setCommand("ls");
+            channelssh.connect();
+            while(!channelssh.isClosed())
+                Thread.sleep(1000L);
+            Log.d("SSH channel status:", String.valueOf(channelssh.getExitStatus()));
+            channelssh.disconnect();
+            session.disconnect();
+        }
+        catch (Exception e)
+        {
+            Log.d("SSH error:", e.getMessage());
+        }
+        Log.d("Command output:", "EXIT");
+        Log.d("Command output:", baos.toString());
+        return baos.toString();
     }
 }

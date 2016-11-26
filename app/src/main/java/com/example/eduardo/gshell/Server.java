@@ -45,7 +45,6 @@ public class Server implements Serializable{
             server = (Server) is.readObject();
             is.close();
             fis.close();
-
         }
         catch(Exception e){Log.d("Loading error:", e.getMessage());}
         return server;
