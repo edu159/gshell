@@ -30,18 +30,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        new AsyncTask<Integer, Void, Void>(){
-            @Override
-            protected Void doInBackground(Integer... params) {
-                try {
-                    output = executeRemoteCommand("er1414", "imperial10@@@2015","login.cx1.hpc.ic.ac.uk", 22);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute(1);
-
 
         // END TEST Server
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -55,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //--------
         //listing files in directory to pass onto the ListAdapter Method
         final String[] fileArray;
-        File contextDir = getApplicationContext().getFilesDir();
+        final File contextDir = getApplicationContext().getFilesDir();
         File dataFilesDir = new File(contextDir.getAbsolutePath() + "/dataFiles");
         //create dir to store dataFiles, in case it does not exist
         try {
@@ -68,24 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
         File[] lsDataFilesDir = dataFilesDir.listFiles();
         fileArray = new String[lsDataFilesDir.length];
+        Integer[] imageId = new Integer[lsDataFilesDir.length];
         for (int i = 0; i < lsDataFilesDir.length; ++i){
             fileArray[i] = lsDataFilesDir[i].getName();
+            imageId[i] = R.drawable.shop;
             //new File(contextDir.getAbsolutePath() + "/dataFiles"+"/"+fileArray[i]).delete();
             Log.d("File", fileArray[i]);
         }
 
+
         //Log.d("File", "hi");
-
-
-
-
 
         //---need to save files in new directory - need to change Server.java accordingly
 
 
         ListView gridView = (ListView) findViewById(R.id.server_list);
-
-        gridView.setAdapter(new ListAdapter(getApplicationContext()));
+        final ListAdapter adapter = new ListAdapter(getApplicationContext(), fileArray, imageId);
+        gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
@@ -103,20 +90,14 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        //Toast.makeText(getApplicationContext(), "Map", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2:
-                        //Toast.makeText(getApplicationContext(), "Music", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
-                        //Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+                Server s = Server.load(contextDir.getAbsolutePath() + "/dataFiles" + "/"+ adapter.labelId[position]);
+                Intent intent = new Intent(getApplicationContext(), qstat_activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("SERVER", s);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+
             }
         });
 
@@ -143,40 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
 
-    public static String executeRemoteCommand(String username,String password,String hostname,int port)
-            throws Exception {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try
-        {
-            JSch jsch = new JSch();
-            Session session = jsch.getSession(username, hostname, port);
-            session.setPassword(password);
 
-            // Avoid asking for key confirmation
-            Properties prop = new Properties();
-            prop.put("StrictHostKeyChecking", "no");
-            session.setConfig(prop);
-            session.connect();
-            ChannelExec channelssh = (ChannelExec)
-                    session.openChannel("exec");
-            channelssh.setOutputStream(baos);
-            // Execute command
-            channelssh.setCommand("ls");
-            channelssh.connect();
-            while(!channelssh.isClosed())
-                Thread.sleep(1000L);
-            Log.d("SSH channel status:", String.valueOf(channelssh.getExitStatus()));
-            channelssh.disconnect();
-            session.disconnect();
-        }
-        catch (Exception e)
-        {
-            Log.d("SSH error:", e.getMessage());
-        }
-        Log.d("Command output:", "EXIT");
-        Log.d("Command output:", baos.toString());
-        return baos.toString();
-    }
 }

@@ -36,10 +36,10 @@ public class HostFormActivity extends AppCompatActivity{
         Server server = new Server(alias, username, password, hostname);
         String filePath = getApplicationContext().getFilesDir().getAbsolutePath() + "/dataFiles";
 
-        //server.save(filePath);
+        server.save(filePath);
 
-        Server s2 = Server.load(filePath+"/cx1");
-        Log.d("Passed:", s2.toString());
+        //Server s2 = Server.load(filePath+"/cx1");
+        //Log.d("Passed:", s2.toString());
         //onUserLeaveHint();
 
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

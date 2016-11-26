@@ -18,12 +18,14 @@ public class ListAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
 
-    private String[] labelId = { "Shop", "Map", "Music", "Settings" };
+    public String[] labelId = null;
 
-    private Integer[] imageId = { R.drawable.shop, R.drawable.map, R.drawable.music, R.drawable.settings };
+    private Integer[] imageId = null;
 
-    public ListAdapter(Context context) {
+    public ListAdapter(Context context, String[] server_names, Integer[] image_id ) {
         layoutInflater = LayoutInflater.from(context);
+        this.labelId = server_names;
+        this.imageId = image_id;
     }
 
 
