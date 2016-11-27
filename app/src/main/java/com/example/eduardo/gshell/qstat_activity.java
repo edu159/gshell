@@ -29,6 +29,7 @@ public class qstat_activity extends AppCompatActivity {
 
     }
 
+
     private class myTask extends AsyncTask<Integer, Void, Void>{
         String output;
         Server server;
