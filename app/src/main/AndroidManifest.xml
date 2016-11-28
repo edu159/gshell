@@ -31,6 +31,11 @@
             android:name=".HostDeleteActivity"
             android:label="@string/title_activity_host_delete"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".qstat_activity" />
+        <activity
+            android:name=".ServerTabActivity"
+            android:label="@string/title_activity_tab"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
