@@ -120,9 +120,21 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Log.d("File", "settings");
             return true;
         }
 
+        if (id == R.id.action_add) {
+            Log.d("File", "Add host");
+            startActivity(new Intent(getApplicationContext(), HostFormActivity.class));
+            return true;
+        }
+
+        if (id == R.id.action_delete) {
+            Log.d("File", "Delete host");
+            startActivity(new Intent(getApplicationContext(), HostDeleteActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

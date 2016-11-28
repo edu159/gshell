@@ -26,7 +26,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".qstat_activity"></activity>
+        <activity android:name=".qstat_activity" />
+        <activity
+            android:name=".HostDeleteActivity"
+            android:label="@string/title_activity_host_delete"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
