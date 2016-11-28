@@ -19,6 +19,7 @@ import java.util.List;
 import java.io.ByteArrayOutputStream;
 import android.os.AsyncTask;
 
+//This is the main Ativity
 
 public class MainActivity extends AppCompatActivity {
 
