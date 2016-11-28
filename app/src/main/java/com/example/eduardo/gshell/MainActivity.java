@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         final ListAdapter adapter = new ListAdapter(getApplicationContext(), fileArray, imageId);
         gridView.setAdapter(adapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
              * Callback method to be invoked when an item in this AdapterView has
              * been clicked.
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Server s = Server.load(contextDir.getAbsolutePath() + "/dataFiles" + "/"+ adapter.labelId[position]);
-                Intent intent = new Intent(getApplicationContext(), qstat_activity.class);
+                Intent intent = new Intent(getApplicationContext(), ServerTabActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("SERVER", s);
                 intent.putExtras(bundle);

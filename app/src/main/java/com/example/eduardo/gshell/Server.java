@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 
 public class Server implements Serializable{
+
     private static final long serialVersionUID=9023849032938493028L;
+
     public String name;
     public String user_name;
     public String passwd;
@@ -38,6 +40,7 @@ public class Server implements Serializable{
             os.writeObject(this);
             os.close();
             fos.close();
+
         }
         catch(Exception e){Log.d("Saving error:", e.getMessage());}
 
