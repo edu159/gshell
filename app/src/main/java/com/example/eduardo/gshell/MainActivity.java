@@ -23,7 +23,7 @@ import android.os.AsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    public String output;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        // END TEST Server
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_delete) {
             Log.d("File", "Delete host");
-            startActivity(new Intent(getApplicationContext(), HostDeleteActivity.class));
+
             return true;
         }
         return super.onOptionsItemSelected(item);
