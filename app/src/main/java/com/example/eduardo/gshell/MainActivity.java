@@ -22,7 +22,7 @@ import android.os.AsyncTask;
 //This is the main Ativity
 
 public class MainActivity extends AppCompatActivity {
-
+    private Server server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

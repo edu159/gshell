@@ -12,15 +12,16 @@ import android.view.MenuItem;
 
 public class ServerTabActivity extends AppCompatActivity {
 
+    private Server server;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.server_tab_activity);
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
-        Server server=
+        this.server=
                 (Server)bundle.getSerializable("SERVER");
-
+        server.connect("shell", 5);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
         setSupportActionBar(toolbar);
 

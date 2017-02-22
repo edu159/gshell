@@ -27,7 +27,7 @@ import java.util.concurrent.LinkedTransferQueue;
 public class Server extends Thread implements Serializable{
 
     private static final long serialVersionUID=9023849032938493028L;
-    private final String CMD_EOF = "\\\\4";
+    private final String CMD_EOF = "\\\\x4";
     private LinkedTransferQueue<QueueAdapter> cmd_queue;
     private JSch jsch;
     public String name;

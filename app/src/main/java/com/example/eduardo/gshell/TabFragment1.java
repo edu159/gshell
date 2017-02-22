@@ -43,7 +43,6 @@ public class TabFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Loaded:", server.toString());
         //new TabFragment1.myTask(server).execute(1);
-        server.connect("shell", 5);
 
         server.exec_cmd("ls -l --color=neve && echo -e", new OutputHandler(handler) {
             @Override
