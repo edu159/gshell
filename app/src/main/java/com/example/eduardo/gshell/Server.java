@@ -129,12 +129,17 @@ public class Server extends Thread implements Serializable{
             String line;
 
             boolean done = false;
+            // The first line is the command we just send. Remove from the output.
+            boolean first_line = true;
             do {
                 line = consoleOutput.readLine();
                 if (line == null)
                     line = "";
                 if (!line.equals("\u0004"))
-                    output += line + "\n";
+                    if (!first_line)
+                        output += line + "\n";
+                    else
+                        first_line = false;
                 else
                     done = true;
             } while (!done);
