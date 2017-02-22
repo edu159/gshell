@@ -116,10 +116,10 @@ public class ServerTabActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                for (int i = 0; i < 5; i++) {
-                    Log.d(myLog, "Emulating some task.. Step " + i);
-                    TimeUnit.SECONDS.sleep(1);
-                }
+
+                    Log.d(myLog, "Emulating some task..");
+                    TimeUnit.SECONDS.sleep(5);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
