@@ -73,6 +73,7 @@ public class TabFragment1 extends Fragment {
     public void showLS(String output)
     {
         String [] fullOutputList = output.split("\n");
+        //TODO Find out howot separate the command lines from the command output lines.
         String [] outputList = Arrays.copyOfRange(fullOutputList, 1, fullOutputList.length);
         int nfiles = outputList.length;
 
