@@ -44,7 +44,7 @@ public class TabFragment1 extends Fragment {
         Log.d("Loaded:", server.toString());
         //new TabFragment1.myTask(server).execute(1);
 
-        server.exec_cmd("ls -l --color=neve && echo -e", new OutputHandler(handler) {
+        server.exec_cmd("ls -l --color=neve", new OutputHandler(handler) {
             @Override
             public void exec(String output) {
                 TextView text = (TextView) getView().findViewById(R.id.textView_tab_fragment_1);
