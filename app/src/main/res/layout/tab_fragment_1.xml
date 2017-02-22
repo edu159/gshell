@@ -9,7 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Tab 1"
+        android:text=""
         android:textAppearance="?android:attr/textAppearanceLarge"/>
-
+    <ListView
+        android:id="@+id/file_list"
+        android:layout_width="match_parent"
+        android:padding="6dp"
+        android:layout_height="wrap_content">
+    </ListView>
 </RelativeLayout>
