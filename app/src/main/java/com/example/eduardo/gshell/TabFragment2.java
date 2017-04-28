@@ -56,7 +56,7 @@ public class TabFragment2 extends Fragment {
                //TextView text2 = (TextView) getView().findViewById(R.id.textView2);
                 String jobNamestr;
 
-                String nJobsstr = output.split("\n")[1];
+                String nJobsstr = output.split("\n")[0];
 
                 int nJobs = Integer.parseInt(nJobsstr);
                 nJobs = nJobs - 2;
@@ -83,15 +83,15 @@ public class TabFragment2 extends Fragment {
 
                     output = output.replaceAll("\n\t","");
                     String[] detailsStrArr = output.split("\n");
-                    String jobNamestr = detailsStrArr[3].split(" = ")[1];
-                    String jobIDstr = detailsStrArr[2].split(": ")[1];
+                    String jobNamestr = detailsStrArr[2].split(" = ")[1];
+                    String jobIDstr = detailsStrArr[1].split(": ")[1];
                     QJob tempJob  = new QJob(jobIDstr,jobNamestr);
 
                     // Adding child data
                     listDataHeader.add(jobNamestr);
                     int thisJob = listDataHeader.size();
                     List<String> jobDetails = new ArrayList<String>();
-                    for (int jobDetInd = 3; jobDetInd < detailsStrArr.length; jobDetInd++) {
+                    for (int jobDetInd = 1; jobDetInd < detailsStrArr.length; jobDetInd++) {
                         jobDetails.add(detailsStrArr[jobDetInd]);
                         tempJob.addDetail(detailsStrArr[jobDetInd].split(" = ")[0],detailsStrArr[jobDetInd].split(" = ")[1]);
                     }

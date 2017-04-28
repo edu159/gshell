@@ -7,9 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<<<<<<< HEAD
-    <!--<android.support.v7.widget.Toolbar
-=======
     <FrameLayout
         android:id="@+id/progressBarHolder"
         android:animateLayoutChanges="true"
@@ -28,7 +25,6 @@
     </FrameLayout>
 
     <android.support.v7.widget.Toolbar
->>>>>>> origin/master
         android:id="@+id/tab_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
