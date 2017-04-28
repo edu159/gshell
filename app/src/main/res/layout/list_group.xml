@@ -22,14 +22,6 @@
             android:textColor="#000"
             android:layout_weight="0.5" />
 
-        <CheckBox
-            android:layout_height="match_parent"
-            android:id="@+id/lblListRunning"
-            android:layout_width="wrap_content"
-            android:checked="false"
-            android:clickable="false"
-            android:focusable="false" />
-
         <ProgressBar
             style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
             android:layout_width="fill_parent"
@@ -39,6 +31,16 @@
             android:progress="50"
             android:max="100"
             android:indeterminate="false" />
+
+        <CheckBox
+            android:layout_height="match_parent"
+            android:id="@+id/lblListRunning"
+            android:layout_width="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:focusable="false" />
+
+
     </LinearLayout>
 
 

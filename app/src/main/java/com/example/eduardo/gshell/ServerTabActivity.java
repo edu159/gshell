@@ -42,9 +42,10 @@ public class ServerTabActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         this.server=
                 (Server)bundle.getSerializable("SERVER");
+
         this.server.connect("shell", 5);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
+        //setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
