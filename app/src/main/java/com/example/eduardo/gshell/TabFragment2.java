@@ -60,9 +60,9 @@ public class TabFragment2 extends Fragment {
 
                 int nJobs = Integer.parseInt(nJobsstr);
                 nJobs = nJobs - 2;
-
-                UpdateJobs(nJobs);
-
+                if (nJobs > 0) {
+                    UpdateJobs(nJobs);
+                }
             }
         });
 
