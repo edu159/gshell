@@ -13,14 +13,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/lblListHeader"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-            android:textSize="17dp"
-            android:textColor="#000"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5">
+
+            <TextView
+                android:id="@+id/lblListHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+                android:textSize="17dp"
+                android:textColor="#000"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/lblListSubHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+                android:textSize="13dp"
+                android:textColor="#666"/>
+
+        </LinearLayout>
 
         <ProgressBar
             style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"

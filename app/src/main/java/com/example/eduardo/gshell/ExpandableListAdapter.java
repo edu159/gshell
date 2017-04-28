@@ -59,9 +59,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         txtListChild.setText(childText);
 
-        if (childText.equals("    job_state = R")) {
+        if (childText.equals("job_state = R")) {
             txtListChild.setBackgroundColor(Color.GREEN);
-        } else if (childText.equals("    job_state = Q")) {
+        } else if (childText.equals("job_state = Q")) {
             txtListChild.setBackgroundColor(Color.RED);
         } else {
             txtListChild.setBackgroundColor(Color.WHITE);
@@ -103,6 +103,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
+        TextView lblListSubHeader = (TextView) convertView
+                .findViewById(R.id.lblListSubHeader);
         CheckBox lblListRunning = (CheckBox) convertView
                 .findViewById(R.id.lblListRunning);
         ProgressBar lblListProg = (ProgressBar) convertView
@@ -114,12 +116,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             if (_jobsList.get(jobnum).jobName == headerTitle) {
                 QJob cJob = _jobsList.get(jobnum);
 
-                String jState = cJob.jobDetails.get("    job_state");
+                lblListSubHeader.setText(cJob.jobID);
+
+                String jState = cJob.jobDetails.get("job_state");
                 if (jState.equals("R")) {
                     lblListRunning.setChecked(true);
-                    String wTime = cJob.jobDetails.get("    resources_used.walltime");
+                    String wTime = cJob.jobDetails.get("resources_used.walltime");
                     double wallTime = Double.parseDouble(wTime.split(":")[0]);
-                    String aTime = cJob.jobDetails.get("    Resource_List.walltime");
+                    String aTime = cJob.jobDetails.get("Resource_List.walltime");
                     double allowedTime = Double.parseDouble(aTime.split(":")[0]);
                     int cProgress = (int) (100 * wallTime / allowedTime);
                     lblListProg.setIndeterminate(false);

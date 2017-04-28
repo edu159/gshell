@@ -91,9 +91,11 @@ public class TabFragment2 extends Fragment {
                     listDataHeader.add(jobNamestr);
                     int thisJob = listDataHeader.size();
                     List<String> jobDetails = new ArrayList<String>();
-                    for (int jobDetInd = 1; jobDetInd < detailsStrArr.length; jobDetInd++) {
-                        jobDetails.add(detailsStrArr[jobDetInd]);
-                        tempJob.addDetail(detailsStrArr[jobDetInd].split(" = ")[0],detailsStrArr[jobDetInd].split(" = ")[1]);
+                    for (int jobDetInd = 2; jobDetInd < detailsStrArr.length; jobDetInd++) {
+                        jobDetails.add(detailsStrArr[jobDetInd].trim());
+                        String tempdetail1 = detailsStrArr[jobDetInd].split(" = ")[0].trim();
+                        String tempdetail2 = detailsStrArr[jobDetInd].split(" = ")[1].trim();
+                        tempJob.addDetail(tempdetail1,tempdetail2);
                     }
                     listDataChild.put(listDataHeader.get(thisJob-1), jobDetails); // Header, Child data
                     jobsList.add(tempJob);
