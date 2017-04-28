@@ -27,6 +27,7 @@ import java.util.concurrent.LinkedTransferQueue;
 public class Server extends Thread implements Serializable{
 
     private static final long serialVersionUID=9023849032938493028L;
+    private final String CMD_EOF = "&& echo -e \\\\x4";
     private LinkedTransferQueue<QueueAdapter> cmd_queue;
     private JSch jsch;
     public String name;
@@ -122,18 +123,23 @@ public class Server extends Thread implements Serializable{
 
             Log.d("cmd", cmd);
             this.commander = new PrintStream(this.ssh_channel.getOutputStream(), true);
-            this.commander.println(cmd);
+            this.commander.println(cmd + " " + this.CMD_EOF);
             consoleOutput = new BufferedReader(new InputStreamReader(this.ssh_channel.getInputStream()));
             Log.d("SSH channel status:", String.valueOf(this.ssh_channel.getExitStatus()));
             String line;
 
             boolean done = false;
+            // The first line is the command we just send. Remove from the output.
+            boolean first_line = true;
             do {
                 line = consoleOutput.readLine();
                 if (line == null)
                     line = "";
                 if (!line.equals("\u0004"))
-                    output += line + "\n";
+                    if (!first_line)
+                        output += line + "\n";
+                    else
+                        first_line = false;
                 else
                     done = true;
             } while (!done);
