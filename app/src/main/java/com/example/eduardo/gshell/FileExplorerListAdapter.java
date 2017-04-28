@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by nargesberry on 21/09/16.
@@ -29,9 +32,10 @@ public class FileExplorerListAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
 
-    public FileExplorerElement[] filesList = null;
+    public List<FileExplorerElement> filesList = new ArrayList<FileExplorerElement>();
 
-    public FileExplorerListAdapter(Context context, FileExplorerElement[] fileList) {
+
+    public FileExplorerListAdapter(Context context, List<FileExplorerElement> fileList) {
         layoutInflater = LayoutInflater.from(context);
         this.filesList = fileList;
     }
@@ -44,7 +48,7 @@ public class FileExplorerListAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return filesList.length;
+        return filesList.size();
     }
 
     /**
@@ -55,8 +59,8 @@ public class FileExplorerListAdapter extends BaseAdapter {
      * @return The data at the specified position.
      */
     @Override
-    public Object getItem(int position) {
-        return filesList[position];
+    public FileExplorerElement getItem(int position) {
+        return filesList.get(position);
     }
 
     /**
@@ -94,8 +98,8 @@ public class FileExplorerListAdapter extends BaseAdapter {
         ImageView imageView = (ImageView)convertView.findViewById(R.id.imgv1);
         TextView textView = (TextView)convertView.findViewById(R.id.tv1);
 
-        textView.setText(filesList[position].name);
-        imageView.setBackgroundResource(filesList[position].imageID);
+        textView.setText(filesList.get(position).name);
+        imageView.setBackgroundResource(filesList.get(position).imageID);
 
         return convertView;
     }
