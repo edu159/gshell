@@ -79,6 +79,8 @@ public class ServerTabActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize tasks
+        check_conn_task = new CheckConnectionTask();
         conn_task = new ConnectionTask();
         conn_task.execute();
     }
@@ -104,6 +106,7 @@ public class ServerTabActivity extends AppCompatActivity {
         Log.d("BACK PRESSED:", "Cleaning...");
         server.shutdown();
         check_conn_task.stop();
+        conn_task.stop();
         super.onBackPressed();
         this.finish();
     }
@@ -152,6 +155,7 @@ public class ServerTabActivity extends AppCompatActivity {
         private AlphaAnimation inAnimation;
         private AlphaAnimation outAnimation;
         private FrameLayout progressBarHolder;
+        private boolean stop = false;
 
         @Override
         protected void onPreExecute() {
@@ -164,7 +168,9 @@ public class ServerTabActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             // Create Dialog in case connection went wrong
-            alertDialog = new AlertDialog.Builder(ServerTabActivity.this).create();
+            AlertDialog.Builder builder = new AlertDialog.Builder(ServerTabActivity.this);
+            alertDialog = builder.create();
+            builder.setCancelable(false);
             alertDialog.setTitle("ERROR");
             alertDialog.setCancelable(false);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "CLOSE",
@@ -177,6 +183,7 @@ public class ServerTabActivity extends AppCompatActivity {
                     });
         }
 
+        public void stop(){stop = true;}
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -185,20 +192,20 @@ public class ServerTabActivity extends AppCompatActivity {
             progressBarHolder.setAnimation(outAnimation);
             progressBarHolder.setVisibility(View.GONE);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            if (!server.connected) {
-                alertDialog.setMessage("Connection problem: " + server.error_msg);
-                alertDialog.show();
+            // Only if the app has not stopped. CAUTION: This is not the best solution.
+            if (!stop) {
+                if (!server.connected) {
+                    alertDialog.setMessage("Connection problem: " + server.error_msg);
+                    alertDialog.show();
+                } else {
+                    // Update tabs after connecting
+                    adapter.file_explorer_fragment.update();
+                    //adapter.job_monitor_fragment.update();
+                    //adapter.terminal_fragment.update();
+                    check_conn_task = new CheckConnectionTask();
+                    check_conn_task.execute();
+                }
             }
-            else {
-                // Update tabs after connecting
-                adapter.file_explorer_fragment.update();
-                //adapter.job_monitor_fragment.update();
-                //adapter.terminal_fragment.update();
-                check_conn_task = new CheckConnectionTask();
-                check_conn_task.execute();
-            }
-
-
         }
 
         @Override
