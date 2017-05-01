@@ -27,7 +27,6 @@ public class HostFormActivity extends AppCompatActivity{
         EditText hostnameEditText = (EditText) findViewById(R.id.hostnameEditText);
         EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
-
         String alias = aliasEditText.getText().toString();
         String username = usernameEditText.getText().toString();
         String hostname = hostnameEditText.getText().toString();
@@ -43,9 +42,26 @@ public class HostFormActivity extends AppCompatActivity{
         //onUserLeaveHint();
 
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
 
+    public void testConnection(View view){
+        EditText aliasEditText = (EditText) findViewById(R.id.aliasEditText);
+        EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        EditText hostnameEditText = (EditText) findViewById(R.id.hostnameEditText);
+        EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
-
-
+        String alias = aliasEditText.getText().toString();
+        String username = usernameEditText.getText().toString();
+        String hostname = hostnameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        Server server = new Server(alias, username, password, hostname);
+        try {
+            server.connect("shell", 5);
+            Log.d("Test connection:", "Connection Successful!");
+        }
+        catch (Exception e) {
+            Log.d("Test connection:", "Connection Failed!");
+        }
+        server.disconnect();
     }
 }

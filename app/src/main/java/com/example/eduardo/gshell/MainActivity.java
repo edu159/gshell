@@ -1,11 +1,7 @@
 package com.example.eduardo.gshell;
-
-import com.jcraft.jsch.*;
-import java.util.Properties;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,18 +11,16 @@ import android.widget.ListView;
 import android.widget.AdapterView;
 import android.util.Log;
 import java.io.File;
-import java.util.List;
-import java.io.ByteArrayOutputStream;
-import android.os.AsyncTask;
+
 
 //This is the main Ativity
 
 public class MainActivity extends AppCompatActivity {
-    private Server server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MAIN ACTIVITY:", "Creating.");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,13 +52,11 @@ public class MainActivity extends AppCompatActivity {
         Integer[] imageId = new Integer[lsDataFilesDir.length];
         for (int i = 0; i < lsDataFilesDir.length; ++i){
             fileArray[i] = lsDataFilesDir[i].getName();
-            imageId[i] = R.drawable.shop;
+            imageId[i] = R.drawable.server;
             //new File(contextDir.getAbsolutePath() + "/dataFiles"+"/"+fileArray[i]).delete();
             Log.d("File", fileArray[i]);
         }
 
-
-        //Log.d("File", "hi");
 
         //---need to save files in new directory - need to change Server.java accordingly
 

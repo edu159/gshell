@@ -1,5 +1,7 @@
 package com.example.eduardo.gshell;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,46 +16,48 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-
-import com.google.android.gms.vision.Frame;
-
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import android.support.design.widget.TabLayout.Tab;
 
-import static android.R.attr.inAnimation;
-import static android.R.attr.outAnimation;
 
 
 public class ServerTabActivity extends AppCompatActivity {
 
     private Server server;
-    private FrameLayout progressBarHolder;
+    private Tab file_explorer_tab;
+    private Tab process_monitor_tab;
+    private Tab terminal_tab;
+    private PagerAdapter adapter;
+    private ConnectionTask conn_task;
+    private CheckConnectionTask check_conn_task;
     String myLog = "myLog";
 
-    AlphaAnimation inAnimation;
-    AlphaAnimation outAnimation;
+
+    //private file_explorer_tab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("SERVER_TAB:", "CREATE");
         setContentView(R.layout.server_tab_activity);
-        progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
-        new MyTask().execute();
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
-        this.server=
-                (Server)bundle.getSerializable("SERVER");
-        this.server.connect("shell", 5);
+        this.server = (Server)bundle.getSerializable("SERVER");
         Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
         setSupportActionBar(toolbar);
 
+        // Create tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        file_explorer_tab = tabLayout.newTab().setText("Explorer");
+        tabLayout.addTab(file_explorer_tab);
+        process_monitor_tab = tabLayout.newTab().setText("Job monitor");
+        tabLayout.addTab(process_monitor_tab);
+        terminal_tab = tabLayout.newTab().setText("Terminal");
+        tabLayout.addTab(terminal_tab);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter
+        adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount(), server);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -61,6 +65,7 @@ public class ServerTabActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                adapter.file_explorer_fragment.update();
             }
 
             @Override
@@ -73,6 +78,9 @@ public class ServerTabActivity extends AppCompatActivity {
 
             }
         });
+
+        conn_task = new ConnectionTask();
+        conn_task.execute();
     }
 
     @Override
@@ -90,17 +98,83 @@ public class ServerTabActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class MyTask extends AsyncTask <Void, Void, Void> {
+
+    @Override
+    public void onBackPressed() {
+        Log.d("BACK PRESSED:", "Cleaning...");
+        server.shutdown();
+        check_conn_task.stop();
+        super.onBackPressed();
+        this.finish();
+    }
+
+   private class CheckConnectionTask extends AsyncTask <Void, Void, Void> {
+
+        private boolean try_connect = false;
+        private boolean stop = false;
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (!stop) {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                    Log.d("CHECK CONN:", "Trying...");
+                    if (!server.checkConnState() & !stop) {
+                        Log.d("CHECK CONN:", "Disconnected!");
+                        try_connect = true;
+                        break;
+                    }
+
+                }
+                catch (InterruptedException e) {}
+            }
+            return null;
+        }
+
+        public void stop(){
+            stop = true;
+        }
+
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (try_connect) {
+                Log.d("CHECK CONN:", "Try reconnecting...");
+                conn_task = new ConnectionTask();
+                conn_task.execute();
+            }
+            else {
+                Log.d("CHECK CONN:", "Stopped.");
+            }
+        }
+    }
+
+    private class ConnectionTask extends AsyncTask <Void, Void, Void> {
+        private AlertDialog alertDialog;
+        private AlphaAnimation inAnimation;
+        private AlphaAnimation outAnimation;
+        private FrameLayout progressBarHolder;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
             inAnimation = new AlphaAnimation(0f, 1f);
             inAnimation.setDuration(200);
             progressBarHolder.setAnimation(inAnimation);
             progressBarHolder.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            // Create Dialog in case connection went wrong
+            alertDialog = new AlertDialog.Builder(ServerTabActivity.this).create();
+            alertDialog.setTitle("ERROR");
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "CLOSE",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            server.shutdown();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
+                    });
         }
 
         @Override
@@ -111,18 +185,33 @@ public class ServerTabActivity extends AppCompatActivity {
             progressBarHolder.setAnimation(outAnimation);
             progressBarHolder.setVisibility(View.GONE);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if (!server.connected) {
+                alertDialog.setMessage("Connection problem: " + server.error_msg);
+                alertDialog.show();
+            }
+            else {
+                // Update tabs after connecting
+                adapter.file_explorer_fragment.update();
+                //adapter.job_monitor_fragment.update();
+                //adapter.terminal_fragment.update();
+                check_conn_task = new CheckConnectionTask();
+                check_conn_task.execute();
+            }
+
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                Log.d("TRY CONN:", "Connecting...");
+                server.connect("shell", 10000);
 
-                    Log.d(myLog, "Emulating some task..");
-                    TimeUnit.SECONDS.sleep(5);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+            catch (IOException e) {
+                Log.d("TRY CONN:", "Failed to connect!.");
+            }
+
             return null;
         }
     }

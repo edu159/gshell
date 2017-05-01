@@ -6,7 +6,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
-    Server server;
+    private Server server;
+    public TabFragment1 file_explorer_fragment;
+    public TabFragment2 job_monitor_fragment;
+    public TabFragment3 terminal_fragment;
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs, Server server) {
         super(fm);
@@ -20,14 +23,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                TabFragment1 tab1 = new TabFragment1(this.server);
-                return tab1;
+                file_explorer_fragment = new TabFragment1(this.server);
+                return file_explorer_fragment;
             case 1:
-                TabFragment2 tab2 = new TabFragment2();
-                return tab2;
+                job_monitor_fragment = new TabFragment2();
+                return job_monitor_fragment;
             case 2:
-                TabFragment3 tab3 = new TabFragment3();
-                return tab3;
+                terminal_fragment = new TabFragment3();
+                return terminal_fragment;
             default:
                 return null;
         }
