@@ -26,7 +26,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 file_explorer_fragment = new TabFragment1(this.server);
                 return file_explorer_fragment;
             case 1:
-                job_monitor_fragment = new TabFragment2();
+                job_monitor_fragment = new TabFragment2(this.server);
                 return job_monitor_fragment;
             case 2:
                 terminal_fragment = new TabFragment3();

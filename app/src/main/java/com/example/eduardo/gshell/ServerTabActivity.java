@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import android.support.design.widget.TabLayout.Tab;
 
+import static android.R.attr.inAnimation;
+import static android.R.attr.outAnimation;
 
 
 public class ServerTabActivity extends AppCompatActivity {
@@ -43,8 +45,8 @@ public class ServerTabActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         this.server = (Server)bundle.getSerializable("SERVER");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.tab_toolbar);
+        //setSupportActionBar(toolbar);
 
         // Create tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);

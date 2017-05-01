@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,9 @@ import com.jcraft.jsch.Session;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public abstract class FileExplorerElement
 {
@@ -33,15 +37,17 @@ public abstract class FileExplorerElement
     public Boolean executable;
     public Boolean link;
 
+    public TabFragment1 contextFragment;
+
     public FileExplorerElement(String lsLine)
     {
 
-        String [] parameters = lsLine.split("\0");
+        List<String> parameters = new ArrayList<String>(Arrays.asList(lsLine.split("\0")));
 
 //        Log.d("FileExplorerElement", "Recieving a line " + lsLine);
-//        Log.d("FileExplorerElement", "Recieved name " + parameters[0]);
-        this.name = parameters[0];
-        this.information = parameters[1];
+//        Log.d("FileExplorerElement", "Recieved name " + parameters.get(0));
+        this.name = parameters.get(0);
+        this.information = parameters.get(1);
         determineFlags(this.information);
     }
 
@@ -90,66 +96,5 @@ public abstract class FileExplorerElement
         {
             return "unknown";
         }
-    }
-}
-
-
-class FileExplorerText extends FileExplorerElement
-{
-    public FileExplorerText(String lsline)
-    {
-        super(lsline);
-        this.type = "text";
-        this.imageID = R.drawable.textfile;
-    }
-
-    public void onCLickAction()
-    {
-        System.out.println("less " + this.name);
-    }
-}
-
-class FileExplorerDirectory extends FileExplorerElement
-{
-    public FileExplorerDirectory(String lsline)
-    {
-        super(lsline);
-        this.type = "directory";
-        this.imageID = R.drawable.directory;
-    }
-
-    public void onCLickAction()
-    {
-        System.out.println("cd " + this.name);
-    }
-}
-
-class FileExplorerBinary extends FileExplorerElement
-{
-    public FileExplorerBinary(String lsline)
-    {
-        super(lsline);
-        this.type = "binary";
-        this.imageID = R.drawable.binaryfile;
-    }
-
-    public void onCLickAction()
-    {
-        System.out.println("this is binary: " + this.name);
-    }
-}
-
-class FileExplorerUnknown extends FileExplorerElement
-{
-    public FileExplorerUnknown(String lsline)
-    {
-        super(lsline);
-        this.type = "unknown";
-        this.imageID = R.drawable.unknownfile;
-    }
-
-    public void onCLickAction()
-    {
-        System.out.println("this object is unknown: " + this.name);
     }
 }
