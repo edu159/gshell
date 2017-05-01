@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +19,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import android.support.design.widget.TabLayout.Tab;
 
-import static android.R.attr.inAnimation;
-import static android.R.attr.outAnimation;
 
 
 public class ServerTabActivity extends AppCompatActivity {
@@ -68,6 +65,7 @@ public class ServerTabActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 adapter.file_explorer_fragment.update();
+                adapter.job_monitor_fragment.update();
             }
 
             @Override
@@ -81,9 +79,11 @@ public class ServerTabActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize tasks
+        // Allocate memmory for tasks
         check_conn_task = new CheckConnectionTask();
         conn_task = new ConnectionTask();
+
+        // Try to connect
         conn_task.execute();
     }
 
@@ -99,7 +99,6 @@ public class ServerTabActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,7 +109,6 @@ public class ServerTabActivity extends AppCompatActivity {
         check_conn_task.stop();
         conn_task.stop();
         super.onBackPressed();
-        this.finish();
     }
 
    private class CheckConnectionTask extends AsyncTask <Void, Void, Void> {
@@ -122,7 +120,7 @@ public class ServerTabActivity extends AppCompatActivity {
             while (!stop) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
-                    Log.d("CHECK CONN:", "Trying...");
+                    //Log.d("CHECK CONN:", "Trying...");
                     if (!server.checkConnState() & !stop) {
                         Log.d("CHECK CONN:", "Disconnected!");
                         try_connect = true;
@@ -169,6 +167,7 @@ public class ServerTabActivity extends AppCompatActivity {
             progressBarHolder.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
             // Create Dialog in case connection went wrong
             AlertDialog.Builder builder = new AlertDialog.Builder(ServerTabActivity.this);
             alertDialog = builder.create();
@@ -185,7 +184,10 @@ public class ServerTabActivity extends AppCompatActivity {
                     });
         }
 
-        public void stop(){stop = true;}
+        public void stop(){
+            stop = true;
+        }
+
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -215,12 +217,10 @@ public class ServerTabActivity extends AppCompatActivity {
             try {
                 Log.d("TRY CONN:", "Connecting...");
                 server.connect("shell", 10000);
-
             }
             catch (IOException e) {
                 Log.d("TRY CONN:", "Failed to connect!.");
             }
-
             return null;
         }
     }

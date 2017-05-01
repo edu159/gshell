@@ -62,9 +62,6 @@ public class TabFragment1 extends Fragment {
         TF1ListView = (ListView) view.findViewById(R.id.file_list);
 
         Log.d("Loaded:", server.toString());
-        //new TabFragment1.myTask(server).execute(1);
-
-        //showLS(outputLines);
         return view;
     }
 

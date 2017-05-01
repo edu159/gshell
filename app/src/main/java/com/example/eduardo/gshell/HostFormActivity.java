@@ -62,6 +62,8 @@ public class HostFormActivity extends AppCompatActivity{
         catch (Exception e) {
             Log.d("Test connection:", "Connection Failed!");
         }
-        server.disconnect();
+        if (server.connected) {
+            server.disconnect();
+        }
     }
 }

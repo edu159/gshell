@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public abstract class FileExplorerElement
-{
+public abstract class FileExplorerElement {
     public String name;
     public String type;
     public String information;
@@ -39,8 +38,7 @@ public abstract class FileExplorerElement
 
     public TabFragment1 contextFragment;
 
-    public FileExplorerElement(String lsLine)
-    {
+    public FileExplorerElement(String lsLine) {
 
         List<String> parameters = new ArrayList<String>(Arrays.asList(lsLine.split("\0")));
 
@@ -53,47 +51,37 @@ public abstract class FileExplorerElement
 
     public abstract void onCLickAction();
 
-    void determineFlags(String information)
-    {
+    void determineFlags(String information) {
         //Check if executable
-        if (information.contains("executable"))
-        {
+        if (information.contains("executable")) {
             this.executable = true;
         }
-        else
-        {
+        else {
             this.executable = false;
         }
 
         // Check if link
         // TODO find a better way of treating links than assigning them as directories
-        if (information.contains("link"))
-        {
+        if (information.contains("link")) {
             this.link = true;
         }
-        else
-        {
+        else {
             this.link = false;
         }
     }
 
-    static String determineType(String information)
-    {
+    static String determineType(String information) {
         // Check for data type
-        if (information.contains("text"))
-        {
+        if (information.contains("text")) {
             return "text";
         }
-        else if ((information.contains("directory")) || information.contains("link"))
-        {
+        else if ((information.contains("directory")) || information.contains("link")) {
             return "directory";
         }
-        else if ((information.contains("data")) || (information.contains("binary")))
-        {
+        else if ((information.contains("data")) || (information.contains("binary"))) {
             return "binary";
         }
-        else
-        {
+        else {
             return "unknown";
         }
     }
