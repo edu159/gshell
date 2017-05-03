@@ -65,6 +65,21 @@ public class TabFragment1 extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        //This gets called every time the fragment is Started
+        //The connection module runs in the background, what ths means that
+        //Sometimes, the onStart command can be issued while onCreate (connection bit)
+        //is still running - this can cause some problems hence the this.server.connected check
+        if (this.server.connected)
+        {
+            Log.d("TabFragment1", "onStart() called");
+            this.update();
+        }
+    }
+
     public void update() {
         server.exec_cmd(serverCommand, new OutputHandler(handler) {
             @Override
