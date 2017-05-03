@@ -17,7 +17,7 @@ public class HostFormEditActivity extends HostFormActivity {
         super.onCreate(savedInstanceState);
 
         String filePath = getIntent().getExtras().getString("filepath");
-        Server server = Server.load(filePath);
+        //Server server = Server.load(filePath);
         aliasEditText.setText(server.name, TextView.BufferType.EDITABLE);
         usernameEditText.setText(server.user_name, TextView.BufferType.EDITABLE);
         hostnameEditText.setText(server.hostname, TextView.BufferType.EDITABLE);

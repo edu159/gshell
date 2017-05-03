@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/swipe_layout"
+android:layout_width="match_parent"
+android:layout_height="72dp">
+
+
+    <!-- Bottom View Start-->
+<LinearLayout
+    android:id="@+id/bottom_wrapper"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#66ddff00">
+
+        <ImageView
+            android:id="@+id/edit_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/edit" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#66FF3300">
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/delete" />
+    </RelativeLayout>
+
+
+</LinearLayout>
+<!-- Bottom View End-->
+
+<!-- Surface View Start -->
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:textSize="16sp"
+        android:typeface="sans"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:id="@+id/txt_alias"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textSize="16sp"
+        android:typeface="sans"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:textColor="@color/colorSecondaryText"
+        android:id="@+id/txt_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+<!-- Surface View End -->
+</com.daimajia.swipe.SwipeLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="72dp"-->
+    <!--android:gravity="center">-->
+
+    <!--<TextView-->
+    <!--android:textSize="16sp"-->
+    <!--android:typeface="sans"-->
+    <!--android:paddingLeft="16dp"-->
+    <!--android:paddingStart="16dp"-->
+    <!--android:id="@+id/txt_alias"-->
+    <!--android:textColor="@color/colorPrimaryText"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:textSize="14sp"-->
+    <!--android:typeface="sans"-->
+    <!--android:paddingLeft="16dp"-->
+    <!--android:paddingStart="16dp"-->
+    <!--android:textColor="@color/colorSecondaryText"-->
+    <!--android:id="@+id/txt_address"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--</LinearLayout>-->

@@ -35,4 +35,7 @@ dependencies {
     compile 'jsch:jsch:0.1.31'
     compile 'com.android.support:support-v4:25.0.1'
     testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7'
 }

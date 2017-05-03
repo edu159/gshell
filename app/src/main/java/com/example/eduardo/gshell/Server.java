@@ -1,25 +1,26 @@
 package com.example.eduardo.gshell; /**
  * Created by eduardo on 24/11/16.
  */
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileInputStream;
 import android.util.Log;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Properties;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.locks.ReentrantLock;
-import java.io.IOException;
 
 
 public class Server extends Thread implements Serializable{
@@ -203,29 +204,49 @@ public class Server extends Thread implements Serializable{
     }
     //public void send_cmd(String cmd) {}
 
-    public void save (String filePath) {
-        FileOutputStream fos;
-        ObjectOutputStream os;
+    public void save (String filePath, String password) {
+        FileOutputStream fos = null;
+        ObjectOutputStream os = null;
         try {
 
             fos = new FileOutputStream(new File(filePath+"/"+name));
             //fos = context.openFileOutput(filePath+"/"+name, context.MODE_PRIVATE);
             os = new ObjectOutputStream(fos);
+            try
+            {
+                AESEncrypter_v2 encrypter = new AESEncrypter_v2(password);
+
+                this.name = encrypter.encrypt(this.name);
+                this.user_name = encrypter.encrypt(this.user_name);
+                this.passwd = encrypter.encrypt(this.passwd);
+                this.hostname = encrypter.encrypt(this.hostname);
+            }
+            catch(Exception error)
+            {
+                error.printStackTrace();
+            }
+
             os.writeObject(this);
             os.close();
             fos.close();
 
         }
         catch(Exception e){Log.d("Saving error:", e.getMessage());}
-
     }
 
-    public static Server load(String filePathPlusName) {
+    public static Server load(String filePathPlusName, String password) {
         Server server = null;
         try {
             FileInputStream fis = new FileInputStream(new File(filePathPlusName));
             ObjectInputStream is = new ObjectInputStream(fis);
             server = (Server) is.readObject();
+            AESEncrypter_v2 encrypter = new AESEncrypter_v2(password);
+
+            server.name = encrypter.decrypt(server.name);
+            server.user_name = encrypter.decrypt(server.user_name);
+            server.passwd = encrypter.decrypt(server.passwd);
+            server.hostname = encrypter.decrypt(server.hostname);
+
             is.close();
             fis.close();
         }

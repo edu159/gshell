@@ -1,16 +1,12 @@
 package com.example.eduardo.gshell;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.graphics.Color;
-
-import java.io.File;
 
 /**
  * Created by Hikmat on 24/11/2016.
@@ -49,7 +45,7 @@ public class HostFormActivity extends AppCompatActivity{
     public void saveDetails(View view) {
         server = getServerFromForms();
         String filePath = getApplicationContext().getFilesDir().getAbsolutePath() + "/dataFiles";
-        server.save(filePath);
+        //server.save(filePath);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
