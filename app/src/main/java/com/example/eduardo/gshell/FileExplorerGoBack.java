@@ -22,10 +22,11 @@ public class FileExplorerGoBack extends FileExplorerElement
         Log.d("FEAdapter","Clicking on " + this.name);
 
         this.contextFragment.serverCommand = "cd .. && file -0 *";
+        this.contextFragment.update();
 
-        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
-        ft.detach(contextFragment);
-        ft.attach(contextFragment);
-        ft.commit();
+//        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
+//        ft.detach(contextFragment);
+//        ft.attach(contextFragment);
+//        ft.commit();
     }
 }

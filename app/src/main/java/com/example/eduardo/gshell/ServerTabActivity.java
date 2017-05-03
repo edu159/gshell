@@ -55,8 +55,8 @@ public class ServerTabActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                adapter.file_explorer_fragment.update();
-                adapter.job_monitor_fragment.update();
+//                adapter.file_explorer_fragment.update();
+//                adapter.job_monitor_fragment.update();
             }
 
             @Override
