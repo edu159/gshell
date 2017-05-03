@@ -46,14 +46,14 @@ public class HostFormActivity extends AppCompatActivity{
         return new Server(alias, username, password, hostname);
     }
 
-    protected void saveDetails(View view) {
+    public void saveDetails(View view) {
         server = getServerFromForms();
         String filePath = getApplicationContext().getFilesDir().getAbsolutePath() + "/dataFiles";
         server.save(filePath);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    protected void testConnection(View view){
+    public void testConnection(View view){
         server = getServerFromForms();
         conn_task = new HostFormConnectionTask(server, this);
         conn_task.execute();

@@ -54,7 +54,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public void update(){
-        server.exec_cmd("qstat | wc -l && echo -e \\\\x4", new OutputHandler(handler) {
+        server.exec_cmd("qstat | wc -l", new OutputHandler(handler) {
             @Override
             public void exec(String output) {
                 //TextView text2 = (TextView) getView().findViewById(R.id.textView2);
@@ -78,7 +78,7 @@ public class TabFragment2 extends Fragment {
 
         for (i = 1; i < nJobs + 1; i++) {
             // Get the job names and use them to extract full data about each job individually
-            server.exec_cmd("qstat -f $(qstat | tail -" + String.valueOf(i) + " | tr ' ' '\n' | head -n 1) && echo -e \\\\x4", new OutputHandler(handler) {
+            server.exec_cmd("qstat -f $(qstat | tail -" + String.valueOf(i) + " | tr ' ' '\n' | head -n 1)", new OutputHandler(handler) {
                 @Override
                 public void exec(String output) {
 
