@@ -18,14 +18,12 @@ public class FileExplorerDirectory extends FileExplorerElement
 
     public void onCLickAction()
     {
-        Log.d("FEDirectory","Clicking on " + this.name);
-
+        Log.d("FEAdapter","Clicking on " + this.name);
         this.contextFragment.serverCommand = "cd " + this.name + " && file -0 *";
         this.contextFragment.update();
-//
-//        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
-//        ft.detach(contextFragment);
-//        ft.attach(contextFragment);
-//        ft.commit();
+/*        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
+        ft.detach(contextFragment);
+        ft.attach(contextFragment);
+        ft.commit();*/
     }
 }

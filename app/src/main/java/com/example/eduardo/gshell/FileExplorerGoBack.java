@@ -23,10 +23,9 @@ public class FileExplorerGoBack extends FileExplorerElement
 
         this.contextFragment.serverCommand = "cd .. && file -0 *";
         this.contextFragment.update();
-
-//        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
-//        ft.detach(contextFragment);
-//        ft.attach(contextFragment);
-//        ft.commit();
+/*        final FragmentTransaction ft = contextFragment.getFragmentManager().beginTransaction();
+        ft.detach(contextFragment);
+        ft.attach(contextFragment);
+        ft.commit();*/
     }
 }

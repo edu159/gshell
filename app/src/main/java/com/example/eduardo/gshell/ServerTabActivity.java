@@ -55,8 +55,8 @@ public class ServerTabActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-//                adapter.file_explorer_fragment.update();
-//                adapter.job_monitor_fragment.update();
+                //adapter.file_explorer_fragment.update();
+                //adapter.job_monitor_fragment.update();
             }
 
             @Override
@@ -159,7 +159,7 @@ public class ServerTabActivity extends AppCompatActivity {
             //TODO: Use fragment manager
             // Update tabs after connecting
             adapter.file_explorer_fragment.update();
-            //adapter.job_monitor_fragment.update();
+            adapter.job_monitor_fragment.update();
             //adapter.terminal_fragment.update();
             check_conn_task = new ServerTabActivity.CheckConnectionTask(server);
             check_conn_task.execute();
