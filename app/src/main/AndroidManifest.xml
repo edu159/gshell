@@ -26,13 +26,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".qstat_activity" />
         <activity
-            android:name=".HostDeleteActivity"
-            android:label="@string/title_activity_host_delete"
+            android:name=".HostFormEditActivity"
+            android:label="HostFormEditActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-            android:name=".HostDeleteActivity">
-        <activity android:name=".qstat_activity" />
+
         <activity
             android:name=".ServerTabActivity"
             android:label="@string/title_activity_tab"

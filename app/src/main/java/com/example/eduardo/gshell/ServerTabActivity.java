@@ -1,7 +1,4 @@
 package com.example.eduardo.gshell;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,13 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.widget.FrameLayout;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import android.support.design.widget.TabLayout.Tab;
+
 
 
 
@@ -30,10 +23,8 @@ public class ServerTabActivity extends AppCompatActivity {
     private PagerAdapter adapter;
     private ConnectionTask conn_task;
     private CheckConnectionTask check_conn_task;
-    String myLog = "myLog";
 
 
-    //private file_explorer_tab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +71,8 @@ public class ServerTabActivity extends AppCompatActivity {
         });
 
         // Allocate memmory for tasks
-        check_conn_task = new CheckConnectionTask();
-        conn_task = new ConnectionTask();
+        check_conn_task = new CheckConnectionTask(server);
+        conn_task = new ServerTabConnectionTask(server, this);
 
         // Try to connect
         conn_task.execute();
@@ -111,10 +102,16 @@ public class ServerTabActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-   private class CheckConnectionTask extends AsyncTask <Void, Void, Void> {
+    private class CheckConnectionTask extends AsyncTask<Void, Void, Void> {
 
         private boolean try_connect = false;
         private boolean stop = false;
+        private Server server;
+
+        public CheckConnectionTask(Server server){
+            this.server = server;
+        }
+
         @Override
         protected Void doInBackground(Void... params) {
             while (!stop) {
@@ -141,7 +138,7 @@ public class ServerTabActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
             if (try_connect) {
                 Log.d("CHECK CONN:", "Try reconnecting...");
-                conn_task = new ConnectionTask();
+                conn_task = new ServerTabConnectionTask(server, ServerTabActivity.this);
                 conn_task.execute();
             }
             else {
@@ -150,78 +147,30 @@ public class ServerTabActivity extends AppCompatActivity {
         }
     }
 
-    private class ConnectionTask extends AsyncTask <Void, Void, Void> {
-        private AlertDialog alertDialog;
-        private AlphaAnimation inAnimation;
-        private AlphaAnimation outAnimation;
-        private FrameLayout progressBarHolder;
-        private boolean stop = false;
+    public class ServerTabConnectionTask extends ConnectionTask {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
-            inAnimation = new AlphaAnimation(0f, 1f);
-            inAnimation.setDuration(200);
-            progressBarHolder.setAnimation(inAnimation);
-            progressBarHolder.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-            // Create Dialog in case connection went wrong
-            AlertDialog.Builder builder = new AlertDialog.Builder(ServerTabActivity.this);
-            alertDialog = builder.create();
-            builder.setCancelable(false);
-            alertDialog.setTitle("ERROR");
-            alertDialog.setCancelable(false);
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "CLOSE",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            server.shutdown();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }
-                    });
-        }
-
-        public void stop(){
-            stop = true;
+        public ServerTabConnectionTask(Server server, AppCompatActivity activity){
+            super(server, activity);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            outAnimation = new AlphaAnimation(1f, 0f);
-            outAnimation.setDuration(200);
-            progressBarHolder.setAnimation(outAnimation);
-            progressBarHolder.setVisibility(View.GONE);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            // Only if the app has not stopped. CAUTION: This is not the best solution.
-            if (!stop) {
-                if (!server.connected) {
-                    alertDialog.setMessage("Connection problem: " + server.error_msg);
-                    alertDialog.show();
-                } else {
-                    // Update tabs after connecting
-                    adapter.file_explorer_fragment.update();
-                    //adapter.job_monitor_fragment.update();
-                    //adapter.terminal_fragment.update();
-                    check_conn_task = new CheckConnectionTask();
-                    check_conn_task.execute();
-                }
-            }
+        protected void ifConnected() {
+            super.ifConnected();
+            //TODO: Use fragment manager
+            // Update tabs after connecting
+            adapter.file_explorer_fragment.update();
+            //adapter.job_monitor_fragment.update();
+            //adapter.terminal_fragment.update();
+            check_conn_task = new ServerTabActivity.CheckConnectionTask(server);
+            check_conn_task.execute();
+
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                Log.d("TRY CONN:", "Connecting...");
-                server.connect("shell", 10000);
-            }
-            catch (IOException e) {
-                Log.d("TRY CONN:", "Failed to connect!.");
-            }
-            return null;
+        protected void cleanUp(){
+            activity.startActivity(new Intent(activity.getApplicationContext(),
+                   MainActivity.class));
         }
     }
+
 }

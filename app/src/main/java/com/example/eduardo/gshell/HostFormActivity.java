@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.graphics.Color;
 
 import java.io.File;
 
@@ -15,55 +17,65 @@ import java.io.File;
  */
 
 public class HostFormActivity extends AppCompatActivity{
+
+    protected Server server;
+    protected EditText aliasEditText;
+    protected EditText usernameEditText;
+    protected EditText hostnameEditText;
+    protected EditText passwordEditText;
+    protected HostFormConnectionTask conn_task;
+    protected TextView testConnTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_form_activity);
+        aliasEditText = (EditText) findViewById(R.id.aliasEditText);
+        usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        hostnameEditText = (EditText) findViewById(R.id.hostnameEditText);
+        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        testConnTextView = (TextView) findViewById(R.id.testConnectionCaption);
+
     }
 
-    public void saveDetails(View view) {
-        EditText aliasEditText = (EditText) findViewById(R.id.aliasEditText);
-        EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-        EditText hostnameEditText = (EditText) findViewById(R.id.hostnameEditText);
-        EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-
+    protected Server getServerFromForms(){
         String alias = aliasEditText.getText().toString();
         String username = usernameEditText.getText().toString();
         String hostname = hostnameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+        return new Server(alias, username, password, hostname);
+    }
 
-        Server server = new Server(alias, username, password, hostname);
+    protected void saveDetails(View view) {
+        server = getServerFromForms();
         String filePath = getApplicationContext().getFilesDir().getAbsolutePath() + "/dataFiles";
-
         server.save(filePath);
-
-        //Server s2 = Server.load(filePath+"/cx1");
-        //Log.d("Passed:", s2.toString());
-        //onUserLeaveHint();
-
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    public void testConnection(View view){
-        EditText aliasEditText = (EditText) findViewById(R.id.aliasEditText);
-        EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-        EditText hostnameEditText = (EditText) findViewById(R.id.hostnameEditText);
-        EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+    protected void testConnection(View view){
+        server = getServerFromForms();
+        conn_task = new HostFormConnectionTask(server, this);
+        conn_task.execute();
+    }
 
-        String alias = aliasEditText.getText().toString();
-        String username = usernameEditText.getText().toString();
-        String hostname = hostnameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        Server server = new Server(alias, username, password, hostname);
-        try {
-            server.connect("shell", 5);
-            Log.d("Test connection:", "Connection Successful!");
+    public class HostFormConnectionTask extends ConnectionTask {
+
+        public HostFormConnectionTask(Server server, AppCompatActivity activity){
+            super(server, activity);
         }
-        catch (Exception e) {
-            Log.d("Test connection:", "Connection Failed!");
-        }
-        if (server.connected) {
+
+        @Override
+        protected void ifConnected() {
+            testConnTextView.setTextColor(Color.GREEN);
+            testConnTextView.setText("  Success!");
             server.disconnect();
+        }
+
+        @Override
+        protected void ifNotConnected() {
+            testConnTextView.setTextColor(Color.RED);
+            testConnTextView.setText("  Failed!");
         }
     }
 }
