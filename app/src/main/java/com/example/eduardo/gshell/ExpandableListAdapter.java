@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,18 +55,31 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
 
-        TextView txtListChild = (TextView) convertView
+        final TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+        final TextView txtListChildValue = (TextView) convertView
+                .findViewById(R.id.lblListItemValue);
 
-        txtListChild.setText(childText);
+        String part1 = childText.substring(0,childText.indexOf(" = "));
+        String part2 = childText.substring(childText.indexOf(" = ") + 3,childText.length());
 
-        if (childText.equals("job_state = R")) {
-            txtListChild.setBackgroundColor(Color.GREEN);
-        } else if (childText.equals("job_state = Q")) {
-            txtListChild.setBackgroundColor(Color.RED);
-        } else {
-            txtListChild.setBackgroundColor(Color.WHITE);
-        }
+        txtListChild.setText(part1);
+        txtListChildValue.setText(part2);
+
+
+        txtListChild.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtListChild.setMaxLines(100 - txtListChild.getMaxLines());
+                txtListChildValue.setMaxLines(100 - txtListChild.getMaxLines());
+            }
+        });
+
+        txtListChildValue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtListChild.setMaxLines(100 - txtListChild.getMaxLines());
+                txtListChildValue.setMaxLines(100 - txtListChild.getMaxLines());
+            }
+        });
 
         return convertView;
     }
@@ -105,11 +119,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListHeader);
         TextView lblListSubHeader = (TextView) convertView
                 .findViewById(R.id.lblListSubHeader);
-        CheckBox lblListRunning = (CheckBox) convertView
+        TextView lblListSubSubHeader = (TextView) convertView
+                .findViewById(R.id.lblListSubSubHeader);
+        TextView lblListRunning = (TextView) convertView
                 .findViewById(R.id.lblListRunning);
         ProgressBar lblListProg = (ProgressBar) convertView
                 .findViewById(R.id.lblListProg);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 
         for (int jobnum = 0; jobnum < _jobsList.size(); jobnum++) {
@@ -117,10 +132,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 QJob cJob = _jobsList.get(jobnum);
 
                 lblListSubHeader.setText(cJob.jobID);
+                String path = cJob.jobDetails.get("Error_Path");
+                path = path.substring(0,path.lastIndexOf("/"));
+                path = path.substring(path.indexOf("/"),path.length());
+                lblListSubSubHeader.setText(path);
 
                 String jState = cJob.jobDetails.get("job_state");
                 if (jState.equals("R")) {
-                    lblListRunning.setChecked(true);
+                    lblListRunning.setText(" R ");
+                    lblListRunning.setTextColor(Color.GREEN);
                     String wTime = cJob.jobDetails.get("resources_used.walltime");
                     double wallTime = Double.parseDouble(wTime.split(":")[0]);
                     String aTime = cJob.jobDetails.get("Resource_List.walltime");
@@ -128,9 +148,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     int cProgress = (int) (100 * wallTime / allowedTime);
                     lblListProg.setIndeterminate(false);
                     lblListProg.setProgress(cProgress,true);
-                } else {
-                    lblListRunning.setChecked(false);
+                } else if (jState.equals("Q")) {
+                    lblListRunning.setText(" Q ");
                     lblListProg.setIndeterminate(true);
+                    lblListRunning.setTextColor(Color.parseColor("#EF6C00"));
+                } else if (jState.equals("H")) {
+                    lblListRunning.setText(" H ");
+                    lblListRunning.setTextColor(Color.RED);
                 }
 
             }
