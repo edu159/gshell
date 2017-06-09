@@ -34,6 +34,7 @@ public class TabFragment2 extends Fragment {
     Server server;
     Handler handler = new Handler();
     int nJobs;
+    private TabFragment2 thistf2;
 
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
@@ -49,6 +50,7 @@ public class TabFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         jobsList = new ArrayList<QJob>();
+        thistf2 = this;
         return inflater.inflate(R.layout.tab_fragment_2, container, false);
 
     }
@@ -72,6 +74,8 @@ public class TabFragment2 extends Fragment {
                     String jobNamestr = detailsStrArr[1].split(" = ")[1];
                     String jobIDstr = detailsStrArr[0].split(": ")[1];
                     QJob tempJob = new QJob(jobIDstr, jobNamestr);
+
+                    tempJob.tf2 = thistf2;
 
                     // Adding child data
                     listDataHeader.add(jobNamestr);
@@ -105,6 +109,7 @@ public class TabFragment2 extends Fragment {
 
         TextView nQueuedTV = (TextView) getView().findViewById(R.id.QNum);
         TextView nRunningTV = (TextView) getView().findViewById(R.id.RNum);
+        TextView nHeldTV = (TextView) getView().findViewById(R.id.HNum);
 
         for (int i = 0; i < nJobs; i++) {
             String tempstate = jobsList.get(i).jobDetails.get("job_state");
@@ -121,6 +126,7 @@ public class TabFragment2 extends Fragment {
 
         nQueuedTV.setText(String.valueOf(Queued));
         nRunningTV.setText(String.valueOf(Running));
+        nHeldTV.setText(String.valueOf(Hold));
 
         return 0;
     }

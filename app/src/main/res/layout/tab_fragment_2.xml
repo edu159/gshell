@@ -14,13 +14,30 @@
             android:id="@+id/statusBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/QLabel"
+                android:id="@+id/RLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Running: "
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/RNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text=""
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/QLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="Queued: "
                 android:textIsSelectable="false" />
@@ -34,16 +51,15 @@
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/RLabel"
-                android:layout_width="match_parent"
+                android:id="@+id/HLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="right"
-                android:text="Running: "
+                android:text="Held: "
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/RNum"
+                android:id="@+id/HNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -162,7 +162,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 lblListRunning.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         cJob.toggleHold(_server);
-
+                        cJob.tf2.update();
                     }
                 });
 

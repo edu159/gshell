@@ -1,6 +1,7 @@
 package com.example.eduardo.gshell;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public class QJob {
     public String jobName;
     public HashMap<String, String> jobDetails;
     public Button button;
+    public TabFragment2 tf2;
 
     // Constructor
     public QJob(String jid, String jname) {
@@ -19,6 +21,7 @@ public class QJob {
         jobName = jname;
         jobDetails = new HashMap<String, String>();
         button = null;
+        tf2 = null;
     }
 
     public void addDetail(String key, String value) {

@@ -3,91 +3,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="#FFF"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#FFF">
+    android:paddingStart="10dp">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="40dp">
 
-        <LinearLayout
+        <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/lblListHeader"
-                android:layout_width="fill_parent"
+            <!-- Bottom View Start-->
+            <LinearLayout
+                android:id="@+id/bottom_wrapper"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-                android:scrollHorizontally="false"
-                android:selectAllOnFocus="false"
-                android:singleLine="true"
-                android:text="Job Title"
-                android:textColor="#000"
-                android:textSize="17dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/lblListSubHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="start"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-                android:singleLine="true"
-                android:text="Job ID"
-                android:textColor="#666"
-                android:textSize="13dp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#66ddff00">
 
-            <TextView
-                android:id="@+id/lblListSubSubHeader"
+                    <ImageView
+                        android:id="@+id/edit_query"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/edit" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#66FF3300">
+
+                    <Button
+                        android:id="@+id/lblListRunning"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/background_light"
+                        android:checked="false"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:text=" U "
+                        android:textAlignment="center"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+                    <!--<ImageView
+                        android:id="@+id/delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/delete" />-->
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <!-- Bottom View End-->
+
+            <!-- Surface View Start -->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="start"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-                android:scrollHorizontally="false"
-                android:singleLine="true"
-                android:text="Path"
-                android:textAlignment="textStart"
-                android:textColor="#666"
-                android:textSize="13dp" />
+                android:layout_weight="0.5"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="#ffffff"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-        <ProgressBar
-            android:id="@+id/lblListProg"
-            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="50" />
+                    <TextView
+                        android:id="@+id/lblListHeader"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="false"
+                        android:selectAllOnFocus="false"
+                        android:singleLine="true"
+                        android:text="Job Title"
+                        android:textColor="#000"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/lblListRunning"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_light"
-            android:checked="false"
-            android:clickable="false"
-            android:focusable="false"
-            android:gravity="center_vertical"
-            android:text=" U "
-            android:textAlignment="center"
-            android:textSize="17dp"
-            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/lblListSubHeader"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
+                        android:text="Job ID"
+                        android:textColor="#666"
+                        android:textSize="13dp" />
 
+                    <TextView
+                        android:id="@+id/lblListSubSubHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="false"
+                        android:singleLine="true"
+                        android:text="Path"
+                        android:textAlignment="textStart"
+                        android:textColor="#666"
+                        android:textSize="13dp" />
+
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/lblListProg"
+                    style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="50" />
+
+            </LinearLayout>
+            <!-- Surface View End -->
+        </com.daimajia.swipe.SwipeLayout>
 
     </LinearLayout>
 
