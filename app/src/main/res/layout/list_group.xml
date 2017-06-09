@@ -74,15 +74,17 @@
             android:max="100"
             android:progress="50" />
 
-        <TextView
+        <Button
             android:id="@+id/lblListRunning"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:background="@android:color/background_light"
             android:checked="false"
             android:clickable="false"
             android:focusable="false"
             android:gravity="center_vertical"
             android:text=" U "
+            android:textAlignment="center"
             android:textSize="17dp"
             android:textStyle="bold" />
 

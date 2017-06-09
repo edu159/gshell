@@ -1,20 +1,19 @@
 package com.example.eduardo.gshell;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -23,13 +22,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
     public ArrayList<QJob> _jobsList;
+    private Server _server;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData, ArrayList<QJob> jobsList) {
+                                 HashMap<String, List<String>> listChildData, ArrayList<QJob> jobsList, Server server) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
         this._jobsList = jobsList;
+        this._server = server;
     }
 
     @Override
@@ -121,7 +122,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListSubHeader);
         TextView lblListSubSubHeader = (TextView) convertView
                 .findViewById(R.id.lblListSubSubHeader);
-        TextView lblListRunning = (TextView) convertView
+        Button lblListRunning = (Button) convertView
                 .findViewById(R.id.lblListRunning);
         ProgressBar lblListProg = (ProgressBar) convertView
                 .findViewById(R.id.lblListProg);
@@ -129,8 +130,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         for (int jobnum = 0; jobnum < _jobsList.size(); jobnum++) {
             if (_jobsList.get(jobnum).jobName == headerTitle) {
-                QJob cJob = _jobsList.get(jobnum);
+                final QJob cJob = _jobsList.get(jobnum);
 
+                cJob.button = lblListRunning;
                 lblListSubHeader.setText(cJob.jobID);
                 String path = cJob.jobDetails.get("Error_Path");
                 path = path.substring(0,path.lastIndexOf("/"));
@@ -156,6 +158,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     lblListRunning.setText(" H ");
                     lblListRunning.setTextColor(Color.RED);
                 }
+
+                lblListRunning.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        cJob.toggleHold(_server);
+
+                    }
+                });
 
             }
         }

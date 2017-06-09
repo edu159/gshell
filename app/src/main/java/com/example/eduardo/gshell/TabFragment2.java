@@ -110,7 +110,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public int refreshJobsList() {
-        expandableListAdapter = new ExpandableListAdapter(expandableListView.getContext(), listDataHeader, listDataChild, jobsList);
+        expandableListAdapter = new ExpandableListAdapter(expandableListView.getContext(), listDataHeader, listDataChild, jobsList, server);
         // setting list adapter
         expandableListView.setAdapter(expandableListAdapter);
 
