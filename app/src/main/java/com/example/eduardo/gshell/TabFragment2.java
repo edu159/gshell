@@ -33,7 +33,7 @@ public class TabFragment2 extends Fragment {
 
     Server server;
     Handler handler = new Handler();
-    int i;
+    int nJobs;
 
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
@@ -54,38 +54,23 @@ public class TabFragment2 extends Fragment {
     }
 
     public void update(){
-        server.exec_cmd("qstat | wc -l", new OutputHandler(handler) {
-            @Override
-            public void exec(String output) {
-                //TextView text2 = (TextView) getView().findViewById(R.id.textView2);
-                String jobNamestr;
-
-                String nJobsstr = output.split("\n")[0];
-
-                int nJobs = Integer.parseInt(nJobsstr);
-                nJobs = nJobs - 2;
-                if (nJobs > 0) {
-                    UpdateJobs(nJobs);
-                }
-            }
-        });
-    }
-
-    public int UpdateJobs(int nJobs) {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         expandableListView = (ExpandableListView) getView().findViewById(R.id.JobsList);
 
-        for (i = 1; i < nJobs + 1; i++) {
-            // Get the job names and use them to extract full data about each job individually
-            server.exec_cmd("qstat -f $(qstat | tail -" + String.valueOf(i) + " | tr ' ' '\n' | head -n 1)", new OutputHandler(handler) {
-                @Override
-                public void exec(String output) {
+        // Run a command to get the new jobs
+        server.exec_cmd("qstat -f", new OutputHandler(handler) {
+            @Override
+            public void exec(String output) {
+                // Condense lines which have been split
+                output = output.replaceAll("\n\t", "");
 
-                    output = output.replaceAll("\n\t", "");
-                    String[] detailsStrArr = output.split("\n");
-                    String jobNamestr = detailsStrArr[2].split(" = ")[1];
-                    String jobIDstr = detailsStrArr[1].split(": ")[1];
+                String[] jobDetailsArray = output.split("\n\n");
+                nJobs = jobDetailsArray.length;
+                for (int jobInd = 0; jobInd < nJobs; jobInd++) {
+                    String[] detailsStrArr = jobDetailsArray[jobInd].split("\n");
+                    String jobNamestr = detailsStrArr[1].split(" = ")[1];
+                    String jobIDstr = detailsStrArr[0].split(": ")[1];
                     QJob tempJob = new QJob(jobIDstr, jobNamestr);
 
                     // Adding child data
@@ -100,23 +85,47 @@ public class TabFragment2 extends Fragment {
                     }
                     listDataChild.put(listDataHeader.get(thisJob - 1), jobDetails); // Header, Child data
                     jobsList.add(tempJob);
-                    refreshJobsList();
                 }
-            });
 
-
-        }
-        return 0;
+                refreshJobsList();
+            }
+        });
     }
 
     public int refreshJobsList() {
+<<<<<<< HEAD
         expandableListAdapter = new ExpandableListAdapter(expandableListView.getContext(), listDataHeader, listDataChild, jobsList, server);
+=======
+        expandableListAdapter = new ExpandableListAdapter(expandableListView.getContext(), listDataHeader, listDataChild, jobsList);
+
+>>>>>>> origin/master
         // setting list adapter
         expandableListView.setAdapter(expandableListAdapter);
 
-        //TextView hLabel = expandableListAdapter.getGroupViewText(0,true,null,null);
-        //hLabel.setBackgroundColor(Color.BLUE);
-        //hLabel.setTextColor(Color.BLUE);
+        int Hold = 0;
+        int Queued = 0;
+        int Running = 0;
+        int Error = 0;
+
+        TextView nQueuedTV = (TextView) getView().findViewById(R.id.QNum);
+        TextView nRunningTV = (TextView) getView().findViewById(R.id.RNum);
+
+        for (int i = 0; i < nJobs; i++) {
+            String tempstate = jobsList.get(i).jobDetails.get("job_state");
+            if (tempstate.contains("Q")) {
+                Queued++;
+            } else if (tempstate.contains("R")) {
+                Running++;
+            } else if (tempstate.contains("H")) {
+                Hold++;
+            } else if (tempstate.contains("E")) {
+                Error++;
+            }
+        }
+
+        nQueuedTV.setText(String.valueOf(Queued));
+        nRunningTV.setText(String.valueOf(Running));
+
         return 0;
     }
 }
